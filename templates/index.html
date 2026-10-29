@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HeaderGuard | Security Header Analyzer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-icon">⬡</span><span>Header<span class="accent">Guard</span><small>SECURITY ANALYZER</small></span></div>
+      <div class="nav-label">WORKSPACE</div>
+      <button class="nav active" data-view="scanner"><span>⌕</span> Scanner</button>
+      <button class="nav" data-view="history"><span>◷</span> Scan history</button>
+      <button class="nav" data-view="about"><span>ⓘ</span> Methodology</button>
+      <div class="sidebar-bottom"><span class="status-dot"></span> Scanner API <b id="apiStatus">Checking…</b><p>Educational project · v1.0</p></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div><span class="eyebrow">SECURITY POSTURE / HTTP</span><h1 id="pageTitle">Website Header Scanner</h1></div><div class="top-pill"><span class="status-dot"></span> Local analysis engine</div></header>
+
+      <section id="view-scanner" class="view">
+        <div class="intro"><div><h2>Measure your HTTP security headers.</h2><p>Analyze public HTTPS websites and get actionable hardening guidance.</p></div><div class="shield-art">⬡</div></div>
+        <div class="scan-panel">
+          <label for="targetUrl">TARGET URL</label>
+          <div class="scan-row"><input id="targetUrl" type="url" placeholder="https://example.com" autocomplete="url"><button id="scanBtn" class="primary">▶ &nbsp; Scan website</button></div>
+          <div class="hint">Only scan websites you own or are authorized to assess. HTTPS on port 443 only.</div>
+          <div id="errorBox" class="error" hidden></div>
+        </div>
+        <div id="emptyState" class="empty-state"><div class="empty-icon">⌁</div><h3>Ready when you are</h3><p>Enter a website above to run your first security header assessment.</p></div>
+        <div id="results" hidden>
+          <div class="section-heading"><div><span class="eyebrow">LATEST ASSESSMENT</span><h2 id="resultUrl">Scan results</h2></div><div class="actions"><button id="exportJson" class="secondary">Export JSON</button><button id="exportCsv" class="secondary">Export CSV</button></div></div>
+          <div class="metrics">
+            <article class="metric score-metric"><span>SECURITY SCORE</span><div class="score-line"><strong id="scoreValue">--</strong><span>/ 100</span><i id="gradeBadge">--</i></div><div class="progress"><span id="scoreBar"></span></div><small id="scoreCaption">Header presence score</small></article>
+            <article class="metric"><span>HEADERS PRESENT</span><strong id="presentValue">--</strong><small>Recommended checks found</small></article>
+            <article class="metric"><span>HEADERS MISSING</span><strong id="missingValue">--</strong><small>Potential hardening gaps</small></article>
+            <article class="metric"><span>HTTP STATUS</span><strong id="httpValue">--</strong><small id="timeValue">Scan timestamp</small></article>
+          </div>
+          <div class="section-heading table-title"><div><span class="eyebrow">DETAILED FINDINGS</span><h2>Header analysis</h2></div><div class="filter-wrap"><label for="filterSelect">SHOW</label><select id="filterSelect"><option value="all">All findings</option><option value="missing">Missing only</option><option value="present">Present only</option></select></div></div>
+          <div id="findingsList" class="findings"></div>
+          <div class="note-box"><b>⚠ Interpretation note</b><p id="notesText"></p></div>
+        </div>
+      </section>
+
+      <section id="view-history" class="view" hidden>
+        <div class="section-heading"><div><span class="eyebrow">LOCAL DATABASE</span><h2>Previous scans</h2><p class="subtext">The latest 100 records saved by this local app.</p></div><button id="clearHistory" class="danger">Clear history</button></div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+
+      <section id="view-about" class="view" hidden>
+        <div class="intro"><div><h2>How HeaderGuard evaluates a website</h2><p>Transparent, rule-based checks designed for learning and demonstration.</p></div></div>
+        <div class="method-grid">
+          <article class="method-card"><h3>01 / Collection</h3><p>The Flask backend sends a single HTTPS GET request with certificate verification enabled. Redirects are not followed automatically.</p></article>
+          <article class="method-card"><h3>02 / Analysis</h3><p>Nine response headers are checked using a weighted model. The score measures presence, not the correctness of each policy.</p></article>
+          <article class="method-card"><h3>03 / Reporting</h3><p>Findings include status, severity, observed value, purpose and remediation guidance. Scan records are stored in SQLite.</p></article>
+          <article class="method-card"><h3>04 / Limitations</h3><p>This is not a penetration test, vulnerability scanner or compliance certification. Some headers are appropriate only for particular applications.</p></article>
+        </div>
+        <div class="note-box"><b>Scoring model</b><p>Content-Security-Policy 25; HSTS 20; X-Content-Type-Options 10; Referrer-Policy 10; Permissions-Policy 10; X-Frame-Options 10; COOP 5; CORP 5; COEP 5. Total: 100 points.</p></div>
+        <p class="subtext">Reference: <a href="https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP HTTP Headers Cheat Sheet</a>.</p>
+      </section>
+      <footer>HeaderGuard · Built for cybersecurity education · Use responsibly</footer>
+    </main>
+  </div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
